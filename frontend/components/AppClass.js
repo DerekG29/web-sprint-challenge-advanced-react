@@ -66,7 +66,7 @@ export default class AppClass extends React.Component {
 
   onSubmit = (evt) => {
     evt.preventDefault()
-    const [x, y] = this.getXY(this.state.index);
+    const [y, x] = this.getXY(this.state.index);
     const { steps, email } = this.state;
     axios.post(ENDPOINT, { x, y, steps, email })
       .then(res => {
@@ -85,24 +85,25 @@ export default class AppClass extends React.Component {
 
   render() {
     const { className } = this.props
+    const { index, steps, message, email } = this.state;
     return (
       <div id="wrapper" className={className}>
         <p>(This component is not required to pass the sprint)</p>
         <div className="info">
           <h3 id="coordinates">{this.getXYMessage()}</h3>
-          <h3 id="steps">You moved {this.state.steps} times</h3>
+          <h3 id="steps">You moved {steps} {steps === 1 ? 'time' : 'times'}</h3>
         </div>
         <div id="grid">
           {
             [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
-              <div key={idx} className={`square${idx === this.state.index ? ' active' : ''}`}>
-                {idx === this.state.index ? 'B' : null}
+              <div key={idx} className={`square${idx === index ? ' active' : ''}`}>
+                {idx === index ? 'B' : null}
               </div>
             ))
           }
         </div>
         <div className="info">
-          <h3 id="message">{this.state.message}</h3>
+          <h3 id="message">{message}</h3>
         </div>
         <div id="keypad">
           <button id="left" onClick={this.move}>LEFT</button>
@@ -112,7 +113,7 @@ export default class AppClass extends React.Component {
           <button id="reset" onClick={this.reset}>reset</button>
         </div>
         <form onSubmit={this.onSubmit}>
-          <input id="email" type="email" placeholder="type email" value={this.state.email} onChange={this.onChange}></input>
+          <input id="email" type="email" placeholder="type email" value={email} onChange={this.onChange}></input>
           <input id="submit" type="submit"></input>
         </form>
       </div>
